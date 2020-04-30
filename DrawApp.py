@@ -9,7 +9,7 @@ import ghostscript
 import time
 
 PATH = '{}/Desktop'.format(os.environ['USERPROFILE'])
-COLORS = ['red', 'yellow', 'green', 'blue', 'black', 'gray', '#eee']
+COLORS = ['red', 'orange', 'yellow', 'green', 'blue', '#eee', 'gray', 'black']
 
 
 class DrawApp:
@@ -30,7 +30,8 @@ class DrawApp:
         upper_frame = tk.Frame(root, height=50)
         upper_frame.grid(row=0, sticky='n')
 
-        if messagebox.askyesno('Question', 'Do you want the app to pick words to draw?'):
+        # If user choose 'yes', the word to draw is randomly picked
+        if messagebox.askyesno('Question', 'Do you want the app to pick the word to draw?'):
             word_to_guess = tk.Label(
                 upper_frame, text=self.pick_word(), font=Font(size=18))
             word_to_guess.grid(row=0, column=0, padx=(10, 15), pady=15)
@@ -56,14 +57,14 @@ class DrawApp:
             c = b.cget('bg')
             b.configure(command=lambda x=c: self.stroke_color(x))
 
-        # button to save users' current work to a file
         photo = Image.open('images/save_icon.png').resize((20, 20))
         photo_sized = ImageTk.PhotoImage(photo)
 
+        # button to save users' current work to a file
         save_button = tk.Button(upper_frame, width=20,
                                 image=photo_sized, command=lambda s=PATH:
                                 self.save_drawing(s))
-        save_button.grid(row=0, column=9, padx=5)
+        save_button.grid(row=0, column=len(COLORS)+2, padx=5)
 
         root.mainloop()
 
@@ -77,9 +78,6 @@ class DrawApp:
             return words[picked].upper()
 
     def draw(self, event, color):
-        '''
-
-        '''
         x1, y1 = (event.x-1), (event.y-1)
         x2, y2 = (event.x+1), (event.y+1)
         canvas.create_oval(x1, y1, x2, y2, fill=color, outline=color)
@@ -96,7 +94,7 @@ class DrawApp:
 
     def save_drawing(self, path):
         '''
-        Saves picture in the directory
+        Saves picture in the directory (Desktop/My drawing)
         '''
         ps = canvas.postscript(colormode='color')
         img = Image.open(io.BytesIO(ps.encode('utf-8')))
