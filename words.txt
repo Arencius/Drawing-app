@@ -1,1 +1,1 @@
-cat,dog,bird,parrot,hangman,pistol,policeman,tree
+cat,dog,bird,parrot,hangman,pistol,policeman,tree,apple,painting,book
