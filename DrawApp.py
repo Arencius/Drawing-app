@@ -17,11 +17,12 @@ class DrawApp:
         self.main()
 
     def main(self):
+        ''' Builds main window and handles all logic '''
         global root, canvas
         root = tk.Tk()
         root.geometry('600x600')
         root.resizable(False, False)
-        root.title('Paint')
+        root.title('Drawing app')
 
         canvas = tk.Canvas(root, bg='#eee', width=600, height=550)
         canvas.grid(pady=(50, 0))
@@ -30,7 +31,7 @@ class DrawApp:
         upper_frame = tk.Frame(root, height=50)
         upper_frame.grid(row=0, sticky='n')
 
-        # If user choose 'yes', the word to draw is randomly picked
+        # If user chooses 'yes', the word to draw is randomly picked
         if messagebox.askyesno('Question', 'Do you want the app to pick the word to draw?'):
             word_to_guess = tk.Label(
                 upper_frame, text=self.pick_word(), font=Font(size=18))
@@ -69,9 +70,7 @@ class DrawApp:
         root.mainloop()
 
     def pick_word(self):
-        '''
-        Returns a random word for the user to draw. String
-        '''
+        ''' Returns a random word for the user to draw. String '''
         with open('words.txt') as f:
             words = f.read().split(',')
             picked = r.randint(0, len(words)-1)
@@ -83,19 +82,16 @@ class DrawApp:
         canvas.create_oval(x1, y1, x2, y2, fill=color, outline=color)
 
     def clear_canvas(self):
+        ''' Clears canvas '''
         canvas.delete('all')
 
     def stroke_color(self, color):
-        '''
-        Binds a draw function to a canvas and sets color of line
-        '''
+        ''' Binds a draw function to a canvas and sets color of line '''
         canvas.bind('<B1-Motion>', lambda event,
                     arg=color: self.draw(event, arg))
 
     def save_drawing(self, path):
-        '''
-        Saves picture in the directory (Desktop/My drawing)
-        '''
+        '''Saves picture in the directory (Desktop/My drawing)'''
         ps = canvas.postscript(colormode='color')
         img = Image.open(io.BytesIO(ps.encode('utf-8')))
 
